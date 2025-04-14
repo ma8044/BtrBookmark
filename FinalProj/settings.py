@@ -15,7 +15,7 @@ import os
 import dj_database_url # install this if using DATABASE_URL
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-DEBUG = False
+DEBUG = True
 SECRET_KEY = os.getenv("SECRET_KEY", "insecure-secret-key")
 ALLOWED_HOSTS = ['btrbookmark.onrender.com', '127.0.0.1', 'localhost']
 
