@@ -15,11 +15,9 @@ import os
 import dj_database_url # install this if using DATABASE_URL
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = False
 SECRET_KEY = os.getenv("SECRET_KEY", "insecure-secret-key")
-ALLOWED_HOSTS = ["*"]
-print("🚨 USING FinalProj.settings")
-print("🔥 ALLOWED_HOSTS =", ALLOWED_HOSTS)
+ALLOWED_HOSTS = ['btrbookmark.onrender.com', '127.0.0.1', 'localhost']
 
 # Static files
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
