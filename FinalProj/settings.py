@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url # install this if using DATABASE_URL
+from django.core.exceptions import DisallowedHost
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = True
@@ -66,6 +67,16 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
+def custom_disallowed_host_middleware(get_response):
+    def middleware(request):
+        try:
+            return get_response(request)
+        except DisallowedHost as e:
+            print("🚫 Disallowed Host:", request.get_host())
+            raise e
+    return middleware
+
+MIDDLEWARE.insert(0, 'FinalProj.settings.custom_disallowed_host_middleware')
 ROOT_URLCONF = 'FinalProj.urls'
 
 TEMPLATES = [
