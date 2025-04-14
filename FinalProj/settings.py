@@ -23,6 +23,7 @@ ALLOWED_HOSTS = ['btrbookmark.onrender.com', '127.0.0.1', 'localhost']
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
+
 # Database
 DATABASES = {
     'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
@@ -80,6 +81,7 @@ TEMPLATES = [
     },
 ]
 
+ROOT_URLCONF = 'FinalProj.urls'
 WSGI_APPLICATION = 'FinalProj.wsgi.application'
 
 
