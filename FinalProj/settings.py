@@ -56,7 +56,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+def custom_disallowed_host_middleware(get_response):
+    def middleware(request):
+        try:
+            return get_response(request)
+        except DisallowedHost as e:
+            print("🚫 Disallowed Host:", request.get_host())
+            raise e
+    return middleware
+
+
 MIDDLEWARE = [
+    'FinalProj.settings.custom_disallowed_host_middleware'
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -67,16 +78,6 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
-def custom_disallowed_host_middleware(get_response):
-    def middleware(request):
-        try:
-            return get_response(request)
-        except DisallowedHost as e:
-            print("🚫 Disallowed Host:", request.get_host())
-            raise e
-    return middleware
-
-MIDDLEWARE.insert(0, 'FinalProj.settings.custom_disallowed_host_middleware')
 ROOT_URLCONF = 'FinalProj.urls'
 
 TEMPLATES = [
