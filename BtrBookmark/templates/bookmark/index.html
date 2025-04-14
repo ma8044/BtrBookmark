@@ -1,0 +1,218 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Welcome!</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <link href="{% static 'bookmark/styles.css' %}" rel="stylesheet">
+        <script src="{% static 'bookmark/script.js' %}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    </head>
+    <body>
+        <div class="customcontext">
+            <button class="btn btn-outline-dark contextbutton text-start"><i class="bi bi-pen"></i>&nbsp;&nbsp;Rename</button>
+            <hr style="margin-top: 5px; margin-bottom: 5px;">
+            <button class="btn btn-outline-dark contextbutton text-start"><i class="bi bi-trash3"></i>&nbsp;&nbsp;Delete</button>
+        </div>
+        
+        {% if not user.is_authenticated %}
+            <div class="start-page">
+                <div class="container image-mask">
+                    <div class="row">
+                        <div class="col-7">
+                        </div>
+                        <div class="d-flex col-5 start-top justify-content-start">
+                            Welcome to
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="start-heading">
+                                BTRBOOKMARK
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col start-bottom">
+                            Organize Your bookmarks with ease!
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 3vh;">
+                        <div class="col-sm-3 col-0"></div>
+                        <div class="d-flex col-sm-2 col-12 justify-content-center p-1">
+                            <form method="get" action="{% url 'login' %}">
+                                <input type="submit" class="btn btn-lg btn-outline-dark custom-btn" value="Login">
+                            </form>
+                        </div>
+                        <div class="col-2"></div>
+                        <div class="d-flex col-sm-3 col-12 justify-content-center p-1">
+                            <form method="get" action="{% url 'register' %}">
+                                <input type="submit" class="btn btn-lg btn-outline-dark custom-btn" value="Register">
+                            </form>
+                        </div>
+                        <div class="col">
+                    </div>
+                </div>
+                <img class="main-image" src="{% static 'bookmark/images/mainimage.png' %}">
+                <img class="main-cloud" src="{% static 'bookmark/images/mainimage2.png' %}">
+            </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    // Create a GSAP timeline
+                    var tl = gsap.timeline();
+            
+                    // Step 1: Fade in the .image-mask container
+                    tl.from(".image-mask", {
+                        opacity: 0,
+                        duration: 1.5,
+                        ease: "power2.out"
+                    })
+            
+                    // Step 2: Fade in the rows within .image-mask
+                    .from(".image-mask .row", {
+                        opacity: 0,
+                        y: 20,
+                        duration: 1,
+                        ease: "power2.out",
+                        stagger: 0.3 // Adds delay between each row
+                    })
+            
+                    // Step 3: Fade in the .main-image
+                    .from(".main-image", {
+                        opacity: 0,
+                        duration: 1.5,
+                        ease: "power2.out"
+                    }, "-=1.5") // Start 1.5 seconds before the previous animation ends
+            
+                    // Step 4: Fade in the .main-cloud
+                    .from(".main-cloud", {
+                        opacity: 0,
+                        duration: 1.5,
+                        ease: "power2.out"
+                    }, "-=1.0"); // Start 1 second before the previous animation ends
+                });
+            </script>
+        {% else %}
+        <div id="indexUrl" data-url="{% url 'index' %}" style="display:none;"></div>
+        <div class="new_folder text-center align-self-center container">
+            <i class="bi bi-x-square close" id="closefolder"></i>
+            <h1>NEW FOLDER</h1>
+            <form id="folder-form">
+                <div class="d-flex form-group justify-content-center">
+                    <input class="form-control new-form" id="newfoldername" required type="text" maxlength="15" name="name" placeholder="Name">
+                </div>
+                <div class="d-flex form-group justify-content-center text-center">
+                    <input type="submit" class="btn btn-outline-dark newbtn" value="Create"> 
+                </div>
+            </form>
+        </div>
+        <div class="new_bookmark text-center align-self-center container">
+            <i class="bi bi-x-square close" id="closebookmark"></i>
+            <h1>NEW BOOKMARK</h1>
+            <form id="bookmark-form">
+                <div class="d-flex form-group justify-content-center">
+                    <input class="form-control new-form" id="newbookmarkname" required maxlength="15" type="text" name="name" placeholder="Name">
+                </div>
+                <div class="d-flex form-group justify-content-center">
+                    <input class="form-control new-form" id="newbookmarklink" required type="text" name="link" placeholder="Link">
+                </div>
+                <div class="d-flex form-group justify-content-center">
+                    <div class="input-group mb-3 new-form">
+                        <label class="input-group-text" for="bookmark_category" style="font-size:20px">Category</label>
+                        <select class="form-select" required id="bookmark_category" style="font-size:20px">
+                          <option value="bi bi-airplane-fill">Travel</option>
+                          <option value="bi bi-journal-text">Education</option>
+                          <option value="bi bi-briefcase-fill">Work</option>
+                          <option value="bi bi-newspaper">News</option>
+                          <option value="bi bi-film">Entertainment</option>
+                          <option value="bi bi-cart-fill">Shopping</option>
+                          <option value="bi bi-bookmark-fill" id="optionselected" selected>Miscellaneous</option>
+                        </select>
+                        <label class="input-group-text" for="inputGroupSelect01" id="bookmarkdisplayselected" style="font-size:20px"><i class="bi bi-bookmark-fill"></i></label>
+                      </div>
+                </div>
+                <div class="d-flex form-group justify-content-center text-center">
+                    <input type="submit" class="btn btn-outline-dark newbtn" style="margin-top: 0vh;" value="Create"> 
+                </div>
+            </form>
+        </div>
+        <div class="scrollable-notifs">
+            <i class="bi bi-x-square close" id="closeNotifs"></i>
+            <h2 id="notif-heading">NOTIFICATIONS</h2>
+            <hr>
+            <div id="all-notifs">
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container-fluid">
+                <!-- Left-aligned items -->
+                <ul class="navbar-nav me-aut align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" id="notifications" href="#">
+                            <div id="notif-circle"></div>
+                            <i class="bi bi-bell"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="btn-group dropend">
+                            <button type="button" class="btn btn-outline-dark dropdown-toggle align-items-center" data-bs-toggle="dropdown" data-bs-placement="right" aria-haspopup="true" aria-expanded="false">
+                                <i class="bi bi-plus-circle"></i> New
+                            </button>
+                            <div class="dropdown-menu" id="dropdown-new">
+                                <a class="dropdown-item" id="make_newfolder">New Folder</a>
+                                <a class="dropdown-item" id="make_newbookmark">New Bookmark</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+        
+                <!-- Center-aligned items -->
+                <div class="centered-elements">
+                    <ul class="navbar-nav">
+                        <div>
+                            <span><a class="navbar-brand" id="top-heading">BtrBookmark</a></span>
+                        </div>
+                    </ul>
+                </div>
+        
+                <!-- Right-aligned items -->
+                <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav d-flex align-items-center">
+                        <li class="nav-item">
+                            <div class="dropdown">
+                                <button class="btn btn-outline-dark dropdown-toggle" type="button" id="currentUser" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{user.username}}
+                                  </button>
+                                <ul class="dropdown-menu dropdown-menu-fit" aria-labelledby="dropdownMenuButton1">
+                                  <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                                </ul>
+                              </div>
+                        </li>
+                    </ul>
+                </ul>
+            </div>
+        </nav>
+        <div class="folders-center">
+            <div class="folders-container container text-center">
+                <div class="row">
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <button class="btn btn-outline-secondary" type="button" id="prevFolder"><i class="bi bi-arrow-bar-left" style="font-size: 20px"></i></button>
+                            <span class="input-group-text" style="font-size: 20px">{{user.username}}/</span>
+                            <input type="text" disabled class="form-control" id="path-display" style="font-size: 20px" placeholder="" data-state="origin">
+                        </div>
+                    </div>
+                </div>
+                <div class="row all-folders align-items-start">
+                </div>
+            </div>
+        </div>
+        <img src="{% static 'bookmark/images/indexbg.png' %}" class="index-img">
+        {% endif %}
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    </body>
+</html>

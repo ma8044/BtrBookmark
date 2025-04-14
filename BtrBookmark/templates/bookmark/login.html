@@ -1,0 +1,81 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Login</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="{% static 'bookmark/styles.css' %}" rel="stylesheet">
+        <script src="{% static 'bookmark/script.js' %}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div class="start-page">
+            <img src="{% static 'bookmark/images/logimage.jpg' %}" class="login-image">
+            <div class="container login-div">
+                <div class="text-center login-text">Login</div>
+                <div class="text-center normal-text" id="message" style="margin-bottom: 0.5vh;">{{message}}</div>
+                <form method="post" action="{% url 'login' %}" class="custom-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input autofocus required class="form-control login_form" type="text" name="username" placeholder="Username" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control login_form" required type="password" name="password" placeholder="Password">
+                    </div>
+                    <div class="text-center normal-text" style="margin-top: -1vh;">
+                        Don't have an account? <a href="{% url 'register' %}">Register here!</a>
+                    </div>
+                    <div class="form-group text-center">
+                        <input type="submit" class="btn btn-outline-dark loginbtn" value="Login"> 
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script>
+        document.addEventListener("DOMContentLoaded", function() {
+        if (document.querySelector('#message').innerHTML === '') {
+            var tl = gsap.timeline();
+
+            // Step 1: Fade in the login-div (or register-div)
+            tl.from(".login-div", {
+                opacity: 0,
+                duration: 0.75,
+                ease: "power2.out"
+            })
+
+            // Step 2: Fade in each element inside the login-div one by one
+            .from(".login-div > div", {
+                opacity: 0,
+                y: 20,
+                duration: 0.5,
+                ease: "power2.out",
+                stagger: 0.3 // Adds delay between each element
+            })
+            .from(".form-group", {
+                opacity: 0,
+                y: 20,
+                duration: 0.5,
+                ease: "power2.out",
+                stagger: 0.3 // Adds delay between each form-group
+            }, "-=1.5") // Start this animation 1.5s before the previous one ends
+            .from(".form-group.text-center", {
+                opacity: 0,
+                y: 20,
+                duration: 0.5,
+                ease: "power2.out"
+            }, "-=1.5") // Start this animation 1.5s before the previous one ends
+
+            // Step 3: Fade in the login-image (or register-image)
+            .from(".login-image", {
+                opacity: 0,
+                duration: 1.5,
+                ease: "power2.out"
+            });
+        }
+    });
+        </script>
+    </body>
+</html>
