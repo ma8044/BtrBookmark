@@ -13,10 +13,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url # install this if using DATABASE_URL
-from django.core.exceptions import DisallowedHost
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-DEBUG = True
+DEBUG = False
 SECRET_KEY = os.getenv("SECRET_KEY", "insecure-secret-key")
 ALLOWED_HOSTS = ['btrbookmark.onrender.com', '127.0.0.1', 'localhost']
 
@@ -39,9 +38,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-bgwmtmu#rt(m7%+u($ut(is6+$)h_jiwv&e11kupk81!+&s4g)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -56,18 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-def custom_disallowed_host_middleware(get_response):
-    def middleware(request):
-        try:
-            return get_response(request)
-        except DisallowedHost as e:
-            print("🚫 Disallowed Host:", request.get_host())
-            raise e
-    return middleware
-
-
 MIDDLEWARE = [
-    'FinalProj.settings.custom_disallowed_host_middleware'
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -78,7 +63,6 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
-ROOT_URLCONF = 'FinalProj.urls'
 
 TEMPLATES = [
     {
