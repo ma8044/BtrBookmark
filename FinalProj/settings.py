@@ -18,6 +18,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = os.getenv("DEBUG", "False") == "True"
 SECRET_KEY = os.getenv("SECRET_KEY", "insecure-secret-key")
 ALLOWED_HOSTS = ["*"]
+print("🚨 USING FinalProj.settings")
+print("🔥 ALLOWED_HOSTS =", ALLOWED_HOSTS)
 
 # Static files
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
